@@ -44,8 +44,13 @@ public class CsvReader implements Reader {
             Object line = lines[i];
             ContactDto contact = new ContactDto();
             String[] items = ((String) line).split(",");
-            contact.setName(items[0]);
-            contact.setUrl(items[1]);
+            if (items.length == 2) {
+                contact.setName(items[0]);
+                contact.setUrl(items[1]);
+            } else if (items.length == 3) {
+                contact.setName(items[0] + items[1]);
+                contact.setUrl(items[2]);
+            }
             contacts.add(contact);
         }
         inputFS.close();
