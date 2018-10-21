@@ -40,7 +40,8 @@ public class CsvReader implements Reader {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputFS))) {
             lines = reader.lines().toArray();
         }
-        for (Object line : lines) {
+        for (int i = 1; i < lines.length; i++) {
+            Object line = lines[i];
             ContactDto contact = new ContactDto();
             String[] items = ((String) line).split(",");
             contact.setName(items[0]);

@@ -1,11 +1,7 @@
 package com.contacts.specification;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -14,7 +10,6 @@ import org.springframework.data.jpa.domain.Specification;
 import com.contacts.entity.Contact;
 import com.contacts.search.Operator;
 import com.contacts.search.SearchCriteria;
-import com.contacts.search.Sorter;
 
 public class ContactSpecification implements Specification<Contact> {
 
@@ -43,18 +38,6 @@ public class ContactSpecification implements Specification<Contact> {
                         predicate =
                                 cb.and(predicate, cb.like(root.get(filter.getKey()), "%" + filter.getValue() + "%"));
                     }
-                }
-            }
-        }
-
-        List<Order> orderList = new ArrayList<>();
-
-        if (criteria.getSorters() != null) {
-            for (Sorter sorter : criteria.getSorters()) {
-                if (sorter.getDir().equals("desc")) {
-                    orderList.add(cb.desc(root.get(sorter.getKey())));
-                } else if (sorter.getDir().equals("asc")) {
-                    orderList.add(cb.asc(root.get(sorter.getKey())));
                 }
             }
         }
