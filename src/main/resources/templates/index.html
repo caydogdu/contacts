@@ -1,0 +1,125 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Include Bootstrap -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	crossorigin="anonymous">
+</head>
+<body>
+
+	<div id="app">
+		<div style="padding: 20px; float: right;">
+			<input v-model="name" placeholder="search in name">
+			<button @click="search">Search</button>
+		</div>
+		<div style="padding: 20px;">
+			<table class="table table-striped table-bordered table-sm">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Picture</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="contact in contacts">
+						<td>{{contact.name}}</td>
+						<td><img v-bind:src="contact.url" width="20px" height="30px"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div style="padding-left: 20px; padding-right: 20px;">
+			<div style="float: left;">Total Pages : {{totalPages}}</div>
+			<div style="float: right;">
+				<button @click="prevPage">Previous</button>
+				Current Page : {{pageNumber}}
+				<button @click="nextPage">Next</button>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+	<script type="text/babel">
+
+	const app = new Vue({
+		el:'#app',
+  		data: {
+            contacts: [],
+			name: "",
+			totalPages: 0,
+			pageNumber: 1
+        },
+
+		methods: {
+			search: function () {
+				this.pageNumber = 1;
+				this.getData(this.pageNumber,this.name);
+			},
+			prevPage: function () {
+				if(this.pageNumber > 1){
+					this.pageNumber = this.pageNumber - 1;
+					this.getData(this.pageNumber,this.name);
+				}
+			},
+			nextPage: function () {
+				if(this.pageNumber < this.totalPages){
+					this.pageNumber = this.pageNumber + 1;
+					this.getData(this.pageNumber,this.name);
+				}
+			},
+    		getData: function (pageNumber,name) {
+      			var criteria = {
+   					"filters":[
+      					{
+         					"key":"name",
+        			 		"operator":"CONTAINS",
+         					"value":name
+      					}
+   					],
+   					"pageNumber":pageNumber,
+   					"size":10
+				};
+
+				fetch('http://localhost:8081/contacts', {
+    				method: 'POST',
+    				headers: {
+      					'Accept': 'application/json',
+      					'Content-Type': 'application/json'
+    				},
+    				body: JSON.stringify(criteria)
+  				})
+				.then(res => res.json())
+    			.then(res => {
+      				this.contacts = res.result;
+					this.totalPages = res.resultInfo.totalPages;
+    			})
+      		}
+    	},
+
+  		created:function() {
+			this.getData(this.pageNumber,this.name);
+  		}
+	})
+
+	</script>
+
+	<style>
+	td, th {
+		padding: 10px;
+	}
+	</style>
+</body>
+</html>
