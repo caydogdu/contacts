@@ -41,8 +41,7 @@ public class ContactController {
     private ContactServiceImpl contactService;
 
     /**
-     * @param SearchCriteria criteria { "filters" : [ { "key" : "name", "operator" : "CONTAINS", "value" : "Bart" } ],
-     *            "page" : 1, "pageSize" : 10 }
+     * @param SearchCriteria criteria
      *
      * @return RestResponse<List<ContactDTO>>
      */
