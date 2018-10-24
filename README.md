@@ -11,6 +11,7 @@ These are the main ability of project
     
 This project was developed with spring boot. Java 8 is required. h2 in-memory db is used. Front end page is developed with vue.js
 
+To see main page, you can browse http://localhost:8081/index after application run
 
 There is a REST Service in this project. Here is an example request and response
 Below request indicates that you would like to search in contact list for name contains Bart and you would like to get first 10 records.
