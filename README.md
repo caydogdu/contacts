@@ -68,7 +68,7 @@ Response for the above request will be like this
       }
     }
 
-To see metrics you can use http://localhost:8081/actuator/metrics/
+To see metrics http://localhost:8081/actuator/metrics/
 
 For online documentation of REST API http://localhost:8081/swagger-ui.html
 
